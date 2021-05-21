@@ -1,0 +1,98 @@
+Launch amazon linux Ec2 instance
+
+connect to ec2 instance using putty
+
+
+Install jenkins - 
+
+sudo yum update -y
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+sudo yum upgrade
+sudo yum install jenkins java-1.8.0-openjdk-devel -y
+sudo systemctl daemon-reload
+sudo systemctl start jenkins
+sudo systemctl status jenkins
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+a91bc17c05504e319afe0782d34d53f5
+
+
+Install Docker
+
+sudo amazon-linux-extras install docker
+sudo yum install docker
+sudo service docker start
+sudo usermod -a -G docker ec2-user
+docker info
+
+Install docker-compose
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+docker-compose --version
+
+Creating Nginx container with docker-compose
+
+Nginx docker-compose yaml
+mkdir demo
+cd demo
+touch docker-compose.yaml
+mkdir src
+vi index1.html
+
+add that html code to index1.html
+
+vim docker-compose.yaml
+version: "3"
+
+services:
+    client:
+        image: nginx
+        ports:
+            - 8000:80
+        volumes:
+            - ./src:/usr/share/nginx/html
+docker-compose up --detach
+
+
+Jenkins pipeline- 
+Configure jenkinspipeline with build with parameter and string parameter title
+Build Triggers- build peroidcally cron expression ( 5 * * * *)
+
+pipeline {
+    agent {
+        label 'slave'
+    }
+    stages {
+        stage('update title') {
+            steps {
+                sh '''
+                echo "${title}" 
+                cd /home/ec2-user/demo/
+                cp index1.html src/index.html
+                sed -i -e "s/_title_/${title}/g" src/index.html
+                '''
+            }
+        }
+        stage('update body'){
+            steps{
+                sh '''
+                cd /home/ec2-user/demo/
+                sed -i -e "s/_num_/${BUILD_NUMBER}/g" -i -e "s/_pipe_/${JOB_NAME}/g" src/index.html
+                docker-compose stop
+                docker-compose rm -f
+                docker-compose up --detach
+                '''
+            }
+        }
+    }
+        post {
+        always {
+            emailext body: 'build result : ${currentBuild.currentResult} build url : ${env.BUILD_URL}', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Build result'
+        }
+    }
+}
+
+
