@@ -90,9 +90,9 @@ pipeline {
     }
         post {
         always {
-            emailext body: 'build result : ${currentBuild.currentResult} build url : ${env.BUILD_URL}', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Build result'
-        }
-    }
+            emailext body: 'build result : ${currentBuild.currentResult} build url : ${env.BUILD_URL}', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Build Interview Time: 11.30 a.m.
+Duration: 30 mins
+Meeting Link: https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZWViZGI3ZjQtODU2ZS00NWMwLWI2MWYtMTkyZTkyNzQ0NDZm%40thread.v2/0?context=%7b%22Tid%22%3a%22aacf45a2-f78b-4172-a6ef-da9d32705bc1%22%2c%22Oid%22%3a%22bd846023-6b59-46db-9966-003dbf5e1c43%22%7d
 }
 
 
