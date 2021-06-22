@@ -1,2 +1,2 @@
 # sample
-# https://www.flocareer.com/dynamic/candidates/ssoLogin/?corp_id=1514&cand_id=173237&auth_token=89d68f84e854cba103387a5d4606ab16&redirect_uri=https://www.flocareer.com/flo2.0/interview/%3Freq=7698%26claim=147304&is_tmpl=true
+# https://teams.microsoft.com/l/meetup-join/19%3ameeting_ODhmYjY0YTktZTJkYi00NjBhLWEyMmMtYTdhZGY4Y2ZhNmZk%40thread.v2/0?context=%7b%22Tid%22%3a%2297984c2b-a229-4609-8185-ae84947bc3fc%22%2c%22Oid%22%3a%224624446d-22e9-41b6-bb7d-c0a6d16513b3%22%7d
